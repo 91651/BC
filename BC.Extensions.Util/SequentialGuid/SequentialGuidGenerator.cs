@@ -5,11 +5,11 @@ namespace BC.Extensions.SequentialGuid
 {
     public class SequentialGuidGenerator
     {
-        public Guid Create(SequentialGuidType guidType)
+        public System.Guid Create(SequentialGuidType guidType)
         {
             var randomBytes = new byte[10];
             RandomNumberGenerator.Create().GetBytes(randomBytes);
-            long timestamp = DateTime.UtcNow.Ticks / 10000L;
+            long timestamp = DateTime.UtcNow.Ticks;
             byte[] timestampBytes = BitConverter.GetBytes(timestamp);
             if (BitConverter.IsLittleEndian)
             {
@@ -38,7 +38,7 @@ namespace BC.Extensions.SequentialGuid
                     break;
             }
 
-            return new Guid(guidBytes);
+            return new System.Guid(guidBytes);
         }
     }
 }

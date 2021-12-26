@@ -2,10 +2,10 @@
 
 namespace BC.Extensions.SequentialGuid
 {
-    public static class SequentialGuid
+    public class Guid
     {
         public static SequentialGuidType sequentialGuidType = SequentialGuidType.SequentialAtEnd;
-        public static Guid NewSequentialGuid(this Guid guid)
+        public static System.Guid NewSequentialGuid()
         {
             return new SequentialGuidGenerator().Create(sequentialGuidType);
         }
