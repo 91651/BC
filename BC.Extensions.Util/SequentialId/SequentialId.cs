@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BC.Extensions.Encode;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,14 @@ namespace BC.Extensions.SequentialId
     public class SequentialId
     {
         public static string NewId() {
-            return new SequentialIdGenerator().Create();
+            var id = new SequentialIdGenerator().Create().ToString("X"); ;
+            return id;
+        }
+
+        public static string NewId(bool isReadable = false)
+        {
+            var id = new SequentialIdGenerator().Create().ToBase32String(isReadable);
+            return id;
         }
     }
 }
