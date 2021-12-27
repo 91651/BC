@@ -5,9 +5,9 @@ namespace BC.Extensions.SequentialGuid
 {
     public class SequentialGuidGenerator
     {
-        public System.Guid Create(SequentialGuidType guidType)
+        public Guid Create(SequentialGuidType guidType)
         {
-            var randomBytes = new byte[10];
+            var randomBytes = new byte[8];
             RandomNumberGenerator.Create().GetBytes(randomBytes);
             long timestamp = DateTime.UtcNow.Ticks;
             byte[] timestampBytes = BitConverter.GetBytes(timestamp);
@@ -21,24 +21,26 @@ namespace BC.Extensions.SequentialGuid
             {
                 case SequentialGuidType.SequentialAsString:
                 case SequentialGuidType.SequentialAsBinary:
-                    Buffer.BlockCopy(timestampBytes, 2, guidBytes, 0, 6);
-                    Buffer.BlockCopy(randomBytes, 0, guidBytes, 6, 10);
+                    Buffer.BlockCopy(timestampBytes, 0, guidBytes, 0, 8);
+                    Buffer.BlockCopy(randomBytes, 0, guidBytes, 8, 8);
 
                     if (guidType == SequentialGuidType.SequentialAsString && BitConverter.IsLittleEndian)
                     {
                         Array.Reverse(guidBytes, 0, 4);
                         Array.Reverse(guidBytes, 4, 2);
+                        Array.Reverse(guidBytes, 6, 2);
                     }
 
                     break;
 
                 case SequentialGuidType.SequentialAtEnd:
-                    Buffer.BlockCopy(randomBytes, 0, guidBytes, 0, 10);
-                    Buffer.BlockCopy(timestampBytes, 2, guidBytes, 10, 6);
+                    Buffer.BlockCopy(randomBytes, 0, guidBytes, 0, 8);
+                    Buffer.BlockCopy(timestampBytes, 6, guidBytes, 8, 2);
+                    Buffer.BlockCopy(timestampBytes, 0, guidBytes, 10, 6);
                     break;
             }
 
-            return new System.Guid(guidBytes);
+            return new Guid(guidBytes);
         }
     }
 }
